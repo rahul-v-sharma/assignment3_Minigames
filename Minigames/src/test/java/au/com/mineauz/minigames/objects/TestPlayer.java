@@ -17,10 +17,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-/**
- * Created for use for the Add5tar MC Minecraft server
- * Created by benjamincharlton on 23/12/2018.
- */
 public class TestPlayer extends PlayerMock {
 
     private Long playerTime;
@@ -48,7 +44,6 @@ public class TestPlayer extends PlayerMock {
         if (relative) {
             playerTimeoffset = time - this.getWorld().getTime();
         } else playerTime = time;
-
     }
 
     @Override
@@ -102,27 +97,67 @@ public class TestPlayer extends PlayerMock {
         return effects;
     }
 
+    // Refactored playSound methods
+
+    public static class SoundParams {
+        private Location location;
+        private String sound;
+        private SoundCategory category;
+        private float volume;
+        private float pitch;
+
+        public SoundParams(Location location, String sound, SoundCategory category, float volume, float pitch) {
+            this.location = location;
+            this.sound = sound;
+            this.category = category;
+            this.volume = volume;
+            this.pitch = pitch;
+        }
+
+        public Location getLocation() {
+            return location;
+        }
+
+        public String getSound() {
+            return sound;
+        }
+
+        public SoundCategory getCategory() {
+            return category;
+        }
+
+        public float getVolume() {
+            return volume;
+        }
+
+        public float getPitch() {
+            return pitch;
+        }
+    }
+
     @Override
     public void playSound(@NotNull Location location, @NotNull Sound sound, float volume, float pitch) {
-        this.playSound(location, sound, null, volume, pitch);
+        playSound(new SoundParams(location, sound.name(), null, volume, pitch));
     }
 
     @Override
     public void playSound(@NotNull Location location, @NotNull String sound, float volume, float pitch) {
-        this.playSound(location, sound, null, volume, pitch);
+        playSound(new SoundParams(location, sound, null, volume, pitch));
     }
 
     @Override
     public void playSound(@NotNull Location location, Sound sound, @Nullable SoundCategory category, float volume, float pitch) {
-        this.playSound(location, sound.name(), category, volume, pitch);
+        playSound(new SoundParams(location, sound.name(), category, volume, pitch));
     }
 
     @Override
     public void playSound(@NotNull Location location, @NotNull String sound, @Nullable SoundCategory category, float volume, float pitch) {
-        String catString;
-        if (category == null) catString = "null";
-        else catString = category.name();
-        System.out.println("Sound played:" + sound.toUpperCase() + " from " + catString + " at Vol" + volume + ":" + pitch);
+        playSound(new SoundParams(location, sound, category, volume, pitch));
+    }
+
+    private void playSound(SoundParams params) {
+        String catString = (params.getCategory() == null) ? "null" : params.getCategory().name();
+        System.out.println("Sound played: " + params.getSound().toUpperCase() + " from " + catString + " at Vol " + params.getVolume() + ":" + params.getPitch());
     }
 
     @Override
