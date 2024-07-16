@@ -437,18 +437,6 @@ public class Events implements Listener {
         }
     }
 
-    @EventHandler(ignoreCancelled = true)
-    private void commandExecute(PlayerCommandPreprocessEvent event) {
-        MinigamePlayer ply = pdata.getMinigamePlayer(event.getPlayer());
-        if (ply.isInMinigame()) {
-            for (String comd : pdata.getDeniedCommands()) {
-                if (event.getMessage().contains(comd)) {
-                    event.setCancelled(true);
-                    event.getPlayer().sendMessage(ChatColor.AQUA + "[Minigames] " + ChatColor.WHITE + MinigameUtils.getLang("minigame.error.noCommand"));
-                }
-            }
-        }
-    }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     private void entityDamageEntity(EntityDamageByEntityEvent event) {

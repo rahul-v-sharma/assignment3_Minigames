@@ -30,7 +30,9 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Vehicle;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.potion.PotionEffect;
@@ -59,6 +61,20 @@ public class MinigamePlayerManager {
 
     public void needsResourcePack(MinigamePlayer player) {
         applyingPack.add(player);
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    private void commandExecute(PlayerCommandPreprocessEvent event) {
+        MinigamePlayerManager pdata = new MinigamePlayerManager();
+        MinigamePlayer ply = pdata.getMinigamePlayer(event.getPlayer());
+        if (ply.isInMinigame()) {
+            for (String comd : pdata.getDeniedCommands()) {
+                if (event.getMessage().contains(comd)) {
+                    event.setCancelled(true);
+                    event.getPlayer().sendMessage(ChatColor.AQUA + "[Minigames] " + ChatColor.WHITE + MinigameUtils.getLang("minigame.error.noCommand"));
+                }
+            }
+        }
     }
 
     public void joinMinigame(MinigamePlayer player, Minigame minigame, boolean isBetting, Double betAmount) {
