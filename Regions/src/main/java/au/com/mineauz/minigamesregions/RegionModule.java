@@ -366,8 +366,6 @@ public class RegionModule extends MinigameModule {
             rm.addItem(new MenuItemPage("Back", MenuUtility.getBackMaterial(), previous), rm.getSize() - 9);
         rm.displayMenu(viewer);
     }
-
-
     @Override
     public void addEditMenuOptions(Menu menu) {
         final MenuItemCustom c = new MenuItemCustom("Regions and Nodes", Material.DIAMOND_BLOCK);
